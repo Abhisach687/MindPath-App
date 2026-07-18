@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="description" content="A privacy-first wellbeing skills journal with CBT, DBT, SFT, ACT, MCT, and MBCT exercises.">
+  <title>MindPath — Daily Skills & Reflection</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#mainContent">Skip to content</a>
+
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Primary navigation">
+      <div class="brand-row">
+        <div class="brand-mark" aria-hidden="true">M</div>
+        <div>
+          <div class="brand-name">MindPath</div>
+          <div class="brand-subtitle">Skills, not diagnoses</div>
+        </div>
+      </div>
+
+      <nav class="nav-list">
+        <button class="nav-item active" data-route="today"><span>⌂</span><span>Today</span></button>
+        <button class="nav-item" data-route="library"><span>◫</span><span>Exercise library</span></button>
+        <button class="nav-item" data-route="checkin"><span>✓</span><span>Daily check-in</span></button>
+        <button class="nav-item" data-route="history"><span>↺</span><span>History</span></button>
+        <button class="nav-item" data-route="insights"><span>⌁</span><span>Insights</span></button>
+        <button class="nav-item" data-route="settings"><span>⚙</span><span>Privacy & settings</span></button>
+      </nav>
+
+      <div class="sidebar-spacer"></div>
+      <div class="privacy-badge">
+        <strong>Private by default</strong>
+        <span>Entries stay in this browser unless you export them.</span>
+      </div>
+      <button class="text-button danger-link" id="openSafety">Safety information</button>
+    </aside>
+
+    <main class="main" id="mainContent">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow" id="todayDate"></p>
+          <h1 id="pageTitle">Today</h1>
+        </div>
+        <div class="topbar-actions">
+          <div class="streak-pill" title="Consecutive days with a check-in or completed exercise">
+            <span aria-hidden="true">✦</span>
+            <strong id="streakCount">0</strong>
+            <span>day streak</span>
+          </div>
+          <button class="avatar-button" id="profileButton" aria-label="Open settings"><span id="avatarInitial">Y</span></button>
+        </div>
+      </header>
+
+      <section class="page active" id="page-today" data-title="Today">
+        <div class="hero-card">
+          <div class="hero-copy">
+            <span class="status-chip" id="weeklyStatusChip">Weekly map due</span>
+            <h2 id="heroGreeting">Build a steadier day, one skill at a time.</h2>
+            <p id="heroSubtext">Complete your weekly wellbeing map, then check in to receive a private, adaptive practice plan.</p>
+            <div class="hero-actions">
+              <button class="primary-button" id="heroPrimary">Start weekly wellbeing map</button>
+              <button class="secondary-button" id="heroSecondary">Browse all exercises</button>
+            </div>
+          </div>
+          <div class="hero-visual" aria-hidden="true">
+            <div class="orbit orbit-one"></div>
+            <div class="orbit orbit-two"></div>
+            <div class="hero-core"><span>Pause</span><strong>Breathe</strong><span>Choose</span></div>
+          </div>
+        </div>
+
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">Adaptive plan</span>
+            <h2>Your practices for today</h2>
+          </div>
+          <button class="text-button" id="refreshRecommendations">Refresh plan</button>
+        </div>
+        <div id="recommendationNotice" class="notice-card hidden"></div>
+        <div class="recommendation-grid" id="recommendationGrid"></div>
+
+        <div class="dashboard-grid">
+          <article class="panel checkin-mini-panel">
+            <div class="panel-heading">
+              <div><span class="eyebrow">Daily pulse</span><h3>How are you arriving?</h3></div>
+              <span class="completion-ring" id="checkinRing">0%</span>
+            </div>
+            <div id="todayCheckinSummary" class="empty-state compact">
+              <strong>No check-in yet</strong>
+              <span>A 60-second check-in improves today’s recommendations.</span>
+            </div>
+            <button class="secondary-button full-width" id="todayCheckinButton">Check in now</button>
+          </article>
+
+          <article class="panel">
+            <div class="panel-heading">
+              <div><span class="eyebrow">This week</span><h3>Practice rhythm</h3></div>
+              <span class="metric-number" id="weeklyCompletionCount">0</span>
+            </div>
+            <div class="week-strip" id="weekStrip"></div>
+            <p class="muted" id="weeklyRhythmCopy">Small, repeated practice is more useful than a perfect streak.</p>
+          </article>
+
+          <article class="panel nlp-mini-panel">
+            <div class="panel-heading">
+              <div><span class="eyebrow">Private text reflection</span><h3>On-device pattern snapshot</h3></div>
+              <span class="local-chip">Local</span>
+            </div>
+            <div id="nlpMiniSummary" class="empty-state compact">
+              <strong>Not enough written entries yet</strong>
+              <span>Your words are analyzed only in this browser.</span>
+            </div>
+            <button class="text-button" data-route-link="insights">Open full insights</button>
+          </article>
+        </div>
+      </section>
+
+      <section class="page" id="page-library" data-title="Exercise library">
+        <div class="library-toolbar panel">
+          <label class="search-box">
+            <span aria-hidden="true">⌕</span>
+            <input id="librarySearch" type="search" placeholder="Search by skill, feeling, or goal" autocomplete="off">
+          </label>
+          <div class="filter-row" id="modalityFilters" role="group" aria-label="Filter exercises by modality"></div>
+          <label class="compact-select">Duration
+            <select id="durationFilter">
+              <option value="all">Any length</option>
+              <option value="short">10 minutes or less</option>
+              <option value="medium">11–15 minutes</option>
+              <option value="long">More than 15 minutes</option>
+            </select>
+          </label>
+        </div>
+        <div class="library-summary"><strong id="libraryCount">0</strong><span>guided exercises</span></div>
+        <div class="library-grid" id="libraryGrid"></div>
+      </section>
+
+      <section class="page" id="page-checkin" data-title="Daily check-in">
+        <div class="split-layout">
+          <form class="panel checkin-form" id="checkinForm">
+            <div class="form-intro">
+              <span class="eyebrow">About one minute</span>
+              <h2>Daily check-in</h2>
+              <p>Rate how things feel right now. This is not a diagnostic assessment. You can update today’s check-in later.</p>
+            </div>
+            <div class="slider-grid" id="checkinSliders"></div>
+            <div class="field-group">
+              <label for="checkinFocus">What needs the most support today?</label>
+              <select id="checkinFocus" name="focus">
+                <option value="">Choose one</option>
+                <option value="anxiety">Worry or anxiety</option>
+                <option value="lowMood">Low mood or low motivation</option>
+                <option value="rumination">Overthinking or rumination</option>
+                <option value="dysregulation">Strong emotions or urges</option>
+                <option value="relationship">Communication or relationship stress</option>
+                <option value="values">Direction, meaning, or motivation</option>
+                <option value="sleep">Sleep or physical depletion</option>
+                <option value="functioning">Getting things done</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="checkinNote">Optional note</label>
+              <textarea id="checkinNote" name="note" rows="5" maxlength="1200" placeholder="What is happening, what helped, or what would make today 5% easier?"></textarea>
+              <div class="field-meta"><span>Analyzed privately on this device</span><span id="checkinNoteCount">0/1200</span></div>
+            </div>
+            <div class="form-actions sticky-actions">
+              <button type="submit" class="primary-button">Save check-in and update plan</button>
+            </div>
+          </form>
+
+          <aside class="panel contextual-panel">
+            <span class="eyebrow">What happens next</span>
+            <h3>Your plan adapts transparently</h3>
+            <div class="process-list">
+              <div><span>1</span><p><strong>State</strong> Your ratings identify today’s immediate needs.</p></div>
+              <div><span>2</span><p><strong>Weekly map</strong> Broader patterns guide modality and difficulty.</p></div>
+              <div><span>3</span><p><strong>Practice history</strong> Helpful exercises gain weight; repetition and overload are limited.</p></div>
+              <div><span>4</span><p><strong>Choice</strong> You can always ignore the plan and choose any exercise.</p></div>
+            </div>
+            <div class="soft-warning">
+              <strong>Not medical advice</strong>
+              <p>Scores and recommendations are educational. A qualified professional should assess persistent, severe, or worsening symptoms.</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="page" id="page-history" data-title="History">
+        <div class="metrics-row" id="historyMetrics"></div>
+        <div class="panel history-panel">
+          <div class="panel-heading wrap">
+            <div><span class="eyebrow">Your records</span><h2>Practice and check-in history</h2></div>
+            <div class="inline-controls">
+              <select id="historyTypeFilter" aria-label="Filter history by type">
+                <option value="all">All records</option>
+                <option value="exercise">Exercises</option>
+                <option value="checkin">Check-ins</option>
+                <option value="assessment">Weekly maps</option>
+              </select>
+              <input id="historySearch" type="search" placeholder="Search entries" aria-label="Search history">
+            </div>
+          </div>
+          <div id="historyList" class="history-list"></div>
+        </div>
+      </section>
+
+      <section class="page" id="page-insights" data-title="Insights">
+        <div class="insight-banner">
+          <div><span class="local-chip">Processed on this device</span><h2>Patterns, not conclusions</h2><p>These charts summarize your own records. They do not diagnose conditions or infer hidden traits.</p></div>
+          <button class="secondary-button" id="recomputeInsights">Recompute insights</button>
+        </div>
+
+        <div class="metrics-row" id="insightMetrics"></div>
+        <div class="charts-grid">
+          <article class="panel chart-panel wide">
+            <div class="panel-heading"><div><span class="eyebrow">Last 14 days</span><h3>Mood, anxiety, and stress</h3></div></div>
+            <canvas id="trendChart" height="280" aria-label="Mood, anxiety, and stress trend chart"></canvas>
+            <div class="chart-legend"><span><i class="legend-dot mood-dot"></i>Mood</span><span><i class="legend-dot anxiety-dot"></i>Anxiety</span><span><i class="legend-dot stress-dot"></i>Stress</span></div>
+          </article>
+          <article class="panel chart-panel">
+            <div class="panel-heading"><div><span class="eyebrow">Practice mix</span><h3>Exercises by approach</h3></div></div>
+            <canvas id="modalityChart" height="280" aria-label="Exercise completion by therapy approach"></canvas>
+          </article>
+          <article class="panel chart-panel">
+            <div class="panel-heading"><div><span class="eyebrow">Weekly map</span><h3>Current support areas</h3></div></div>
+            <canvas id="radarChart" height="280" aria-label="Current weekly wellbeing domain chart"></canvas>
+          </article>
+        </div>
+
+        <div class="insights-detail-grid">
+          <article class="panel">
+            <div class="panel-heading"><div><span class="eyebrow">Language patterns</span><h3>On-device NLP report</h3></div></div>
+            <div id="nlpReport" class="report-stack"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading"><div><span class="eyebrow">Adaptive learning</span><h3>What the recommender has learned</h3></div></div>
+            <div id="recommenderReport" class="report-stack"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="page" id="page-settings" data-title="Privacy & settings">
+        <div class="settings-grid">
+          <form class="panel settings-form" id="settingsForm">
+            <div class="panel-heading"><div><span class="eyebrow">Personalization</span><h2>App settings</h2></div></div>
+            <div class="field-group"><label for="nickname">Name or nickname</label><input id="nickname" name="nickname" type="text" maxlength="40" placeholder="You"></div>
+            <div class="field-group"><label for="dailyGoal">Exercises recommended per day</label><select id="dailyGoal" name="dailyGoal"><option value="2">2 — lighter plan</option><option value="3">3 — balanced plan</option><option value="4">4 — focused plan</option><option value="5">5 — intensive self-practice</option></select><small>The engine may suggest fewer when your energy is very low or distress is high.</small></div>
+            <div class="field-group"><label for="themeSetting">Appearance</label><select id="themeSetting" name="theme"><option value="system">Use device setting</option><option value="light">Light</option><option value="dark">Dark</option></select></div>
+            <label class="switch-row"><span><strong>Gentle language</strong><small>Use softer prompts and reduce performance-oriented wording.</small></span><input id="gentleLanguage" type="checkbox"><i></i></label>
+            <label class="switch-row"><span><strong>In-app daily cue</strong><small>Show a reminder banner when the app opens after your selected time.</small></span><input id="reminderEnabled" type="checkbox"><i></i></label>
+            <div class="field-group"><label for="reminderTime">Daily cue time</label><input id="reminderTime" type="time"></div>
+            <button class="primary-button" type="submit">Save settings</button>
+          </form>
+
+          <div class="panel data-panel">
+            <div class="panel-heading"><div><span class="eyebrow">Your data</span><h2>Export, import, or reset</h2></div></div>
+            <div class="data-action"><div><strong>Export encrypted-free JSON</strong><p>Download a readable backup. Store it somewhere private.</p></div><button class="secondary-button" id="exportData">Export</button></div>
+            <div class="data-action"><div><strong>Import backup</strong><p>Replace current app data with a MindPath JSON export.</p></div><label class="secondary-button file-button">Import<input type="file" id="importData" accept="application/json"></label></div>
+            <div class="data-action"><div><strong>Clear session drafts</strong><p>Delete unfinished exercise drafts from this browser session.</p></div><button class="secondary-button" id="clearDrafts">Clear drafts</button></div>
+            <div class="data-action danger-zone"><div><strong>Reset all local data</strong><p>Permanently removes check-ins, assessments, entries, and preferences from this browser.</p></div><button class="danger-button" id="resetData">Reset app</button></div>
+          </div>
+
+          <div class="panel privacy-panel">
+            <span class="eyebrow">Privacy model</span>
+            <h3>No account. No cloud. No trackers.</h3>
+            <p>MindPath uses <code>localStorage</code> for persistent records and <code>sessionStorage</code> for unfinished drafts and today’s temporary recommendation state.</p>
+            <ul class="clean-list"><li>No text is sent to an AI service.</li><li>NLP uses transparent word and phrase scoring in your browser.</li><li>Clearing browser site data can erase entries unless you export a backup.</li></ul>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <nav class="mobile-nav" aria-label="Mobile navigation">
+    <button class="mobile-nav-item active" data-route="today"><span>⌂</span><small>Today</small></button>
+    <button class="mobile-nav-item" data-route="library"><span>◫</span><small>Library</small></button>
+    <button class="mobile-nav-item" data-route="checkin"><span>✓</span><small>Check-in</small></button>
+    <button class="mobile-nav-item" data-route="history"><span>↺</span><small>History</small></button>
+    <button class="mobile-nav-item" data-route="insights"><span>⌁</span><small>Insights</small></button>
+  </nav>
+
+  <div class="modal-backdrop hidden" id="exerciseModal" role="dialog" aria-modal="true" aria-labelledby="exerciseModalTitle">
+    <div class="modal exercise-modal">
+      <button class="modal-close" data-close-modal="exerciseModal" aria-label="Close">×</button>
+      <div class="exercise-modal-header" id="exerciseModalHeader"></div>
+      <div class="exercise-tab-list" role="tablist">
+        <button class="exercise-tab active" data-exercise-tab="guide">Guide</button>
+        <button class="exercise-tab" data-exercise-tab="worksheet">Worksheet</button>
+      </div>
+      <div class="exercise-tab-panel active" id="exerciseGuidePanel"></div>
+      <form class="exercise-tab-panel" id="exerciseWorksheetForm"></form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="assessmentModal" role="dialog" aria-modal="true" aria-labelledby="assessmentTitle">
+    <div class="modal assessment-modal">
+      <button class="modal-close" data-close-modal="assessmentModal" aria-label="Close">×</button>
+      <div class="assessment-progress"><span id="assessmentProgressBar"></span></div>
+      <div id="assessmentContent"></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="recordModal" role="dialog" aria-modal="true" aria-labelledby="recordTitle">
+    <div class="modal record-modal">
+      <button class="modal-close" data-close-modal="recordModal" aria-label="Close">×</button>
+      <div id="recordContent"></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="safetyModal" role="dialog" aria-modal="true" aria-labelledby="safetyTitle">
+    <div class="modal safety-modal">
+      <button class="modal-close" data-close-modal="safetyModal" aria-label="Close">×</button>
+      <div class="safety-icon" aria-hidden="true">!</div>
+      <span class="eyebrow">Safety comes first</span>
+      <h2 id="safetyTitle">This app cannot provide crisis care.</h2>
+      <p>If you may harm yourself or someone else, cannot stay safe, or are in immediate danger, stop using the exercise tools and contact your local emergency service or go to the nearest emergency department now. Tell a trusted person and avoid being alone.</p>
+      <p>For persistent, severe, or worsening symptoms, contact a licensed mental-health professional or medical clinician. Screening and app recommendations are not a diagnosis.</p>
+      <div class="safety-actions"><button class="primary-button" id="safetyAcknowledge">I understand</button><button class="secondary-button" id="makeSafetyPlan">Open grounding exercise</button></div>
+    </div>
+  </div>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="exercises.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

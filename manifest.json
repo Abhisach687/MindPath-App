@@ -1,0 +1,9 @@
+{
+  "name": "MindPath — Daily Skills & Reflection",
+  "short_name": "MindPath",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f4f6fb",
+  "theme_color": "#4f46e5",
+  "icons": [{"src":"favicon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
