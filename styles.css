@@ -149,7 +149,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
 .modality-badge { display: inline-flex; align-items: center; padding: 5px 8px; border-radius: 8px; background: color-mix(in srgb, var(--accent,var(--primary)) 12%, var(--surface-solid)); color: var(--accent,var(--primary)); font-size: .69rem; font-weight: 900; letter-spacing: .08em; }
 .duration { color: var(--muted); font-size: .75rem; }
 .exercise-card h3 { margin: 0; font-size: 1.08rem; line-height: 1.25; letter-spacing: -.025em; }
-.exercise-card p { margin: 0; color: var(--muted); font-size: .86rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.exercise-card p { margin: 0; color: var(--muted); font-size: .86rem; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
 .tag { font-size: .65rem; padding: 5px 7px; border-radius: 999px; background: var(--surface-2); color: var(--muted); }
 .exercise-card-actions { margin-top: auto; display: flex; gap: 8px; }
