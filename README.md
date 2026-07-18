@@ -1,6 +1,6 @@
 # MindPath — Daily Skills & Reflection
 
-##Live at:
+## Live at:
 https://abhisach687.github.io/MindPath-App/
 
 A privacy-first, dependency-free single-page web app for guided self-reflection and skills practice. It includes original, evidence-informed exercises inspired by:
